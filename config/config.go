@@ -21,7 +21,7 @@ func InitDB() (*sql.DB, error) {
 	DBPort := viper.GetString("DB_PORT")
 	DBName := viper.GetString("DB_NAME")
 
-	dataSourceName := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", DBUsername, DBPassword, DBHost, DBPort, DBName)
+	dataSourceName := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", DBUsername, DBPassword, DBHost, DBPort, DBName)
 
 	// Open a database connection
 	db, err := sql.Open("mysql", dataSourceName)

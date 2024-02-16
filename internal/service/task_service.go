@@ -11,6 +11,7 @@ import (
 
 type TaskService interface {
 	Create(*model.TaskInput) (*model.Task, error)
+	UpdateTask(taskID string, updateTask *model.TaskInputUpdate) (*model.Task, error)
 }
 
 type taskService struct {
@@ -42,4 +43,35 @@ func (ts *taskService) Create(ti *model.TaskInput) (*model.Task, error) {
 	}
 
 	return result, nil
+}
+
+func (ts *taskService) UpdateTask(taskUUID string, updateTask *model.TaskInputUpdate) (*model.Task, error) {
+	task, err := ts.taskRepo.GetTaskByUUID(taskUUID)
+
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	dateTime, err := time.Parse("2006-01-02", updateTask.DueDate)
+
+	if err != nil {
+		return nil, err
+	}
+
+	task.Title = updateTask.Title
+	task.Description = updateTask.Description
+	task.DueDate = dateTime
+
+	if updateTask.Status == constant.COMPLETED {
+		task.Status = updateTask.Status
+	}
+
+	updatedTask, err := ts.taskRepo.UpdateTask(task.ID, task)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return updatedTask, nil
 }
