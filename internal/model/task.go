@@ -20,6 +20,11 @@ type TaskInput struct {
 	DueDate     string `json:"due_date" validate:"required,datetime=2006-01-02"`
 }
 
+type TaskInputUpdate struct {
+	TaskInput
+	Status string `json:"status" validate:"omitempty,eq=completed"`
+}
+
 type TaskOutput struct {
 	ID          string `json:"id"`
 	Title       string `json:"title"`
