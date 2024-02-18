@@ -19,6 +19,7 @@ type TaskRepository interface {
 	UpdateTask(taskID int64, task *model.Task) (*model.Task, error)
 	List(filter map[string]string, page, limit int) ([]model.Task, error)
 	Count(filter map[string]string) (int64, error)
+	GetSummary(filter map[string]string) (*model.TaskSummary, error)
 }
 
 type taskRepository struct {
@@ -197,4 +198,36 @@ func (tr *taskRepository) Count(filter map[string]string) (int64, error) {
 	}
 
 	return totalCount, err
+}
+
+func (tr *taskRepository) GetSummary(filter map[string]string) (*model.TaskSummary, error) {
+	var builder strings.Builder
+	taskSummary := &model.TaskSummary{}
+
+	baseQuery := `
+		SELECT
+			COUNT(*) AS total,
+			SUM(CASE WHEN status = 'in-progress' THEN 1 ELSE 0 END) AS in_progress,
+			SUM(CASE WHEN status = 'completed' THEN 1 ELSE 0 END) AS completed
+		FROM
+			tasks
+		WHERE 1 = 1
+	`
+
+	builder.WriteString(baseQuery)
+
+	filterValues := []any{}
+
+	if v, ok := filter[constant.TASK_FILTER_DUE_DATE_NAME]; ok {
+		builder.WriteString(" AND due_date = ?")
+		filterValues = append(filterValues, v)
+	}
+
+	query := builder.String()
+	err := tr.db.QueryRow(query, filterValues...).Scan(&taskSummary.Total, &taskSummary.InProgress, &taskSummary.Completed)
+	if err != nil {
+		return taskSummary, err
+	}
+
+	return taskSummary, nil
 }

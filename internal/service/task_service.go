@@ -14,6 +14,7 @@ type TaskService interface {
 	Create(*model.TaskInput) (*model.Task, error)
 	UpdateTask(taskID string, updateTask *model.TaskInputUpdate) (*model.Task, error)
 	ListTasks(params map[string]string) ([]model.Task, int64, error)
+	TaskSummary(params map[string]string) (*model.TaskSummary, error)
 }
 
 type taskService struct {
@@ -107,4 +108,14 @@ func (ts *taskService) ListTasks(params map[string]string) ([]model.Task, int64,
 	}
 
 	return tasks, totalCount, nil
+}
+
+func (ts *taskService) TaskSummary(params map[string]string) (*model.TaskSummary, error) {
+	taskSummary, err := ts.taskRepo.GetSummary(params)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return taskSummary, nil
 }
