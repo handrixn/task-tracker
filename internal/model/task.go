@@ -14,6 +14,12 @@ type Task struct {
 	UpdatedAt   time.Time `json:"updated_at"`
 }
 
+type TaskSummary struct {
+	Total      int `json:"total"`
+	InProgress int `json:"in_progress"`
+	Completed  int `json:"completed"`
+}
+
 type TaskInput struct {
 	Title       string `json:"title" validate:"required"`
 	Description string `json:"description" validate:"required"`

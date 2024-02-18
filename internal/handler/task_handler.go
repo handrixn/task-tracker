@@ -154,3 +154,22 @@ func (th *TaskHandler) TaskList(w http.ResponseWriter, r *http.Request) {
 
 	util.JsonResponse(w, http.StatusOK, responseData)
 }
+
+func (th *TaskHandler) TaskSummary(w http.ResponseWriter, r *http.Request) {
+	dueDateFilter := r.URL.Query().Get("due_date")
+
+	params := map[string]string{}
+
+	if dueDateFilter != "" {
+		params[constant.TASK_FILTER_DUE_DATE_NAME] = dueDateFilter
+	}
+
+	taskSummary, err := th.taskService.TaskSummary(params)
+
+	if err != nil {
+		util.JsonResponse(w, http.StatusInternalServerError, nil)
+		return
+	}
+
+	util.JsonResponse(w, http.StatusOK, taskSummary)
+}

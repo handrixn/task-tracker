@@ -14,7 +14,7 @@ func NewTaskRouter(r *mux.Router, h *handler.TaskHandler) *mux.Router {
 	taskRoute.HandleFunc("/", h.TaskList).Methods(http.MethodGet)
 	taskRoute.HandleFunc("/", h.CreateTask).Methods(http.MethodPost)
 	taskRoute.HandleFunc("/{uuid}", h.UpdateTask).Methods(http.MethodPut)
-	taskRoute.HandleFunc("/{uuid}", h.UpdateTask).Methods(http.MethodGet)
+	taskRoute.HandleFunc("/summary", h.TaskSummary).Methods(http.MethodGet)
 
 	taskRoute.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(map[string]string{"message": "PONG"})
