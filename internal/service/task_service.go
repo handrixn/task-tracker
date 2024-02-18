@@ -2,6 +2,7 @@ package service
 
 import (
 	"log"
+	"strconv"
 	"time"
 
 	"github.com/handrixn/task-tracker/internal/constant"
@@ -12,6 +13,7 @@ import (
 type TaskService interface {
 	Create(*model.TaskInput) (*model.Task, error)
 	UpdateTask(taskID string, updateTask *model.TaskInputUpdate) (*model.Task, error)
+	ListTasks(params map[string]string) ([]model.Task, int64, error)
 }
 
 type taskService struct {
@@ -74,4 +76,35 @@ func (ts *taskService) UpdateTask(taskUUID string, updateTask *model.TaskInputUp
 	}
 
 	return updatedTask, nil
+}
+
+func (ts *taskService) ListTasks(params map[string]string) ([]model.Task, int64, error) {
+	var page, limit int
+
+	pageStr, pageExist := params["page"]
+	limitStr, limitExist := params["limit"]
+
+	if pageExist {
+		page, _ = strconv.Atoi(pageStr)
+		delete(params, "page")
+	}
+
+	if limitExist {
+		limit, _ = strconv.Atoi(limitStr)
+		delete(params, "limit")
+	}
+
+	tasks, err := ts.taskRepo.List(params, page, limit)
+
+	if err != nil {
+		return nil, 0, err
+	}
+
+	totalCount, err := ts.taskRepo.Count(params)
+
+	if err != nil {
+		return nil, 0, err
+	}
+
+	return tasks, totalCount, nil
 }
