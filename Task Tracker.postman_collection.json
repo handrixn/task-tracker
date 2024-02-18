@@ -1,0 +1,138 @@
+{
+	"info": {
+		"_postman_id": "6edb0714-bd45-4083-afc9-002e4501f52e",
+		"name": "Task Tracker",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "19273286"
+	},
+	"item": [
+		{
+			"name": "Create Task",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-api-token",
+						"value": "HJZkQrCwgrBN23aTcnyo",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"test 1\",\n    \"description\": \"test desc\",\n    \"due_date\": \"2023-02-17\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/tasks/create"
+			},
+			"response": []
+		},
+		{
+			"name": "Update Task",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "x-api-token",
+						"value": "HJZkQrCwgrBN23aTcnyo",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"test 1\",\n    \"description\": \"test desc\",\n    \"due_date\": \"2023-02-17\",\n    \"status\": \"completed\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/tasks/b9821ac3-cd1a-4234-b3b8-b96b2f751cc0/update"
+			},
+			"response": []
+		},
+		{
+			"name": "Task List",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-api-token",
+						"value": "HJZkQrCwgrBN23aTcnyo",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/tasks",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"tasks"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "limit",
+							"value": "5",
+							"disabled": true
+						},
+						{
+							"key": "status",
+							"value": "completed",
+							"disabled": true
+						},
+						{
+							"key": "search",
+							"value": "be",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Task Summary",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-api-token",
+						"value": "HJZkQrCwgrBN23aTcnyo",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/tasks/summary",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"tasks",
+						"summary"
+					],
+					"query": [
+						{
+							"key": "due_date",
+							"value": "2023-02-18",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

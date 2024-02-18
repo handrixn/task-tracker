@@ -100,6 +100,17 @@ CREATE TABLE IF NOT EXISTS tasks (
 | Task List      | Retrieves a list of tasks with optional filters and pagination | GET         | http://localhost:8080/tasks                  | x-api-token: HJZkQrCwgrBN23aTcnyo          | query parameters: `search`, `status`, `page`, `limit`                                                                                             | `curl --location 'http://localhost:8080/tasks?search={search}&status={status}&page={page}&limit={limit}' --header 'x-api-token: HJZkQrCwgrBN23aTcnyo'` |
 | Task Summary   | Retrieves a summary of tasks with optional filter by due date | GET         | http://localhost:8080/tasks/summary          | x-api-token: HJZkQrCwgrBN23aTcnyo          | query parameter: `due_date`                                                                                             | `curl --location 'http://localhost:8080/tasks/summary?due_date={due_date}' --header 'x-api-token: HJZkQrCwgrBN23aTcnyo'` |
 
+### Run API with Postman
+
+If you want to run with postman, you can import postman collection file from this project
+
+To import the collection file into Postman:
+
+1. Open Postman.
+2. Click on "Import" in the top left corner.
+3. Choose the collection file called ```Task Tracker.postman_collection.json``` inside this root folder project.
+4. Click "Open" to import the collection into Postman.
+
 ### Running the Application
 
 #### Clone Repository
