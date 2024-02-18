@@ -11,7 +11,7 @@ import (
 )
 
 type TaskService interface {
-	Create(*model.TaskInput) (*model.Task, error)
+	CreateTask(*model.TaskInput) (*model.Task, error)
 	UpdateTask(taskID string, updateTask *model.TaskInputUpdate) (*model.Task, error)
 	ListTasks(params map[string]string) ([]model.Task, int64, error)
 	TaskSummary(params map[string]string) (*model.TaskSummary, error)
@@ -25,7 +25,7 @@ func NewTaskService(taskRepo repository.TaskRepository) *taskService {
 	return &taskService{taskRepo: taskRepo}
 }
 
-func (ts *taskService) Create(ti *model.TaskInput) (*model.Task, error) {
+func (ts *taskService) CreateTask(ti *model.TaskInput) (*model.Task, error) {
 	dateTime, err := time.Parse("2006-01-02", ti.DueDate)
 	if err != nil {
 		log.Println("Error parsing date:", err)
@@ -49,7 +49,7 @@ func (ts *taskService) Create(ti *model.TaskInput) (*model.Task, error) {
 }
 
 func (ts *taskService) UpdateTask(taskUUID string, updateTask *model.TaskInputUpdate) (*model.Task, error) {
-	task, err := ts.taskRepo.GetTaskByUUID(taskUUID)
+	task, err := ts.taskRepo.GetByUUID(taskUUID)
 
 	if err != nil {
 		log.Println(err)
@@ -70,7 +70,7 @@ func (ts *taskService) UpdateTask(taskUUID string, updateTask *model.TaskInputUp
 		task.Status = updateTask.Status
 	}
 
-	updatedTask, err := ts.taskRepo.UpdateTask(task.ID, task)
+	updatedTask, err := ts.taskRepo.Update(task.ID, task)
 
 	if err != nil {
 		return nil, err

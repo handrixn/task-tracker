@@ -15,8 +15,8 @@ import (
 
 type TaskRepository interface {
 	Create(m *model.Task) (*model.Task, error)
-	GetTaskByUUID(taskUUID string) (*model.Task, error)
-	UpdateTask(taskID int64, task *model.Task) (*model.Task, error)
+	GetByUUID(taskUUID string) (*model.Task, error)
+	Update(taskID int64, task *model.Task) (*model.Task, error)
 	List(filter map[string]string, page, limit int) ([]model.Task, error)
 	Count(filter map[string]string) (int64, error)
 	GetSummary(filter map[string]string) (*model.TaskSummary, error)
@@ -84,10 +84,10 @@ func (tr *taskRepository) Create(task *model.Task) (*model.Task, error) {
 	return task, nil
 }
 
-func (r *taskRepository) GetTaskByUUID(taskUUID string) (*model.Task, error) {
+func (tr *taskRepository) GetByUUID(taskUUID string) (*model.Task, error) {
 	var task model.Task
 	query := "SELECT id, uuid, title, description, due_date, status, version, created_at, updated_at FROM tasks WHERE uuid=?"
-	err := r.db.QueryRow(query, taskUUID).Scan(
+	err := tr.db.QueryRow(query, taskUUID).Scan(
 		&task.ID,
 		&task.UUID,
 		&task.Title,
@@ -113,7 +113,7 @@ func (r *taskRepository) GetTaskByUUID(taskUUID string) (*model.Task, error) {
 	return &task, nil
 }
 
-func (tr *taskRepository) UpdateTask(taskID int64, task *model.Task) (*model.Task, error) {
+func (tr *taskRepository) Update(taskID int64, task *model.Task) (*model.Task, error) {
 	now := time.Now()
 	command := "UPDATE tasks SET title=?, description=?, due_date=?, status=?, version=version+1, updated_at=? WHERE id=? AND version=?"
 	stmt, err := tr.db.Prepare(command)
