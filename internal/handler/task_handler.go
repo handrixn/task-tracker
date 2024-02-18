@@ -35,7 +35,7 @@ func (th *TaskHandler) CreateTask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	taskCreated, err := th.taskService.Create(&newTaskPayload)
+	taskCreated, err := th.taskService.CreateTask(&newTaskPayload)
 
 	if err != nil {
 		log.Println(err)
